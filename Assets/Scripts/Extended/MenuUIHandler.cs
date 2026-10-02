@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEditor.Actions;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -15,7 +17,7 @@ public class MenuUIHandler : MonoBehaviour
     {
         ColorPicker.Init();
         ColorPicker.onColorChanged += NewColorSelected;
-        
+
         //when the menu load we set the color picker to the right color
         ColorPicker.SelectColor(MainManager.Instance.TeamColor);
     }
@@ -27,11 +29,8 @@ public class MenuUIHandler : MonoBehaviour
     
     public void Exit()
     {
-        //save the team color before exiting
         MainManager.Instance.SaveColor();
-        
 #if UNITY_EDITOR
-        //Don't forget since this use editor code, need to add "using UnityEditor" at the top and wrap it between #if
         EditorApplication.ExitPlaymode();
 #else
         Application.Quit();
@@ -47,8 +46,7 @@ public class MenuUIHandler : MonoBehaviour
     {
         MainManager.Instance.SaveColor();
     }
-
-    public void LoadColorCliked()
+    public void LoadColorClicked()
     {
         MainManager.Instance.LoadColor();
         ColorPicker.SelectColor(MainManager.Instance.TeamColor);
