@@ -31,13 +31,13 @@ public class OptimUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         //NOTE : User would have to add those sample. By default, no sample are there so profiling will show them
         //"Update take some time", and then to narrow down, they had those Sample region to pinpoint which part
         Profiler.BeginSample("Handling Time");
-        
+     
         HandleTime();
-        
+
         Profiler.EndSample();
         Profiler.BeginSample("Rotating");
 
@@ -113,19 +113,19 @@ public class OptimUnit : MonoBehaviour
 
     void Move()
     {
-        // Vector3 position = transform.position;
-        //
-        // float distanceToCenter = Vector3.Distance(Vector3.zero, position);
-        // float speed = 0.5f + distanceToCenter / areaSize.magnitude;
-        //
-        // int steps = Random.Range(1000, 2000);
-        // float increment = Time.deltaTime / steps;
-        // for (int i = 0; i < steps; ++i)
-        // {
-        //     position += currentVelocity * increment * speed;
-        // }
-        //
-        // transform.position = position;
+        //Vector3 position = transform.position;
+
+        //float distanceToCenter = Vector3.Distance(Vector3.zero, position);
+        //float speed = 0.5f + distanceToCenter / areaSize.magnitude;
+
+        //int steps = Random.Range(1000, 2000);
+        //float increment = Time.deltaTime / steps;
+        //for (int i = 0; i < steps; ++i)
+        //{
+        //    position += currentVelocity * increment * speed;
+        //}
+
+        //transform.position = position;
 
         transform.position = transform.position + currentVelocity * Time.deltaTime;
     }

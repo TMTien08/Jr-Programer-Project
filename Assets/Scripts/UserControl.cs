@@ -55,6 +55,42 @@ public class UserControl : MonoBehaviour
     {
         Marker.SetActive(false);
     }
+    public void HandleSelection()
+    {
+        var ray = GameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            //the collider could be children of the unit, so we make sure to check in the parent
+            var unit = hit.collider.GetComponentInParent<Unit>();
+            selected = unit;
+
+
+            //check if the hit object have a IUIInfoContent to display in the UI
+            //if there is none, this will be null, so this will hid the panel if it was displayed
+            var uiInfo = hit.collider.GetComponentInParent<MainUIHandler.IUIInfoContent>();
+            MainUIHandler.Instance.SetNewInfoContent(uiInfo);
+        }
+    }
+    public void HandleAction()
+    {
+        //right click give order to the unit
+        var ray = GameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            var building = hit.collider.GetComponentInParent<Building>();
+
+            if (building != null)
+            {
+                selected.GoTo(building);
+            }
+            else
+            {
+                selected.GoTo(hit.point);
+            }
+        }
+    }
 
     private void Update()
     {
@@ -63,39 +99,11 @@ public class UserControl : MonoBehaviour
 
         if (leftClickAction.WasPressedThisFrame())
         {
-            var ray = GameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                //the collider could be children of the unit, so we make sure to check in the parent
-                var unit = hit.collider.GetComponentInParent<Unit>();
-                selected = unit;
-                
-                
-                //check if the hit object have a IUIInfoContent to display in the UI
-                //if there is none, this will be null, so this will hid the panel if it was displayed
-                var uiInfo = hit.collider.GetComponentInParent<MainUIHandler.IUIInfoContent>();
-                MainUIHandler.Instance.SetNewInfoContent(uiInfo);
-            }
+            HandleSelection();
         }
         else if (selected != null && rightClickAction.WasPressedThisFrame())
         {   
-            //right click give order to the unit
-            var ray = GameCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                var building = hit.collider.GetComponentInParent<Building>();
-                
-                if (building != null)
-                {
-                    selected.GoTo(building);
-                }
-                else
-                {
-                    selected.GoTo(hit.point);
-                }
-            }
+            HandleAction();
         }
 
         MarkerHandling();
